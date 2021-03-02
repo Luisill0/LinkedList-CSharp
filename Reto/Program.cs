@@ -2,9 +2,9 @@
 
 namespace Reto
 {
-    public class Main
+    public class Program
     {
-        public static void main(string[] args)
+        public static void Main(string[] args)
         {
             LinkedList lista1 = new LinkedList();
 
