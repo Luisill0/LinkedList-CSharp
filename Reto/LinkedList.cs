@@ -4,29 +4,102 @@ using System.Text;
 
 namespace Reto
 {
-    public class LinkedList
+    /**
+     * Lista doblemente ligada
+     */
+    public class LinkedList<G> : List<G>
     {
-        public enum Position
+        public class Node<T>
         {
-            BEFORE,AFTER
+            internal readonly T data;
+            internal Node<T> previous;
+            internal Node<T> next;
+
+            public Node(T data)
+            {
+                this.data = data;
+            }
+        }
+        internal class ForwardIterator : Iterator<G>
+        {
+            private Node<G> currentNode;
+
+            public bool hasNext()
+            {
+                return currentNode != null;
+            }
+
+            public G next()
+            {
+                G data = currentNode.data;
+                currentNode = currentNode.next;
+                return data;
+            }
+
+            Node<G> getCurrentNode()
+            {
+                return currentNode;
+            }
+
+            public void setCurrentNode(Node<G> currentNode)
+            {
+                this.currentNode = currentNode;
+            }
+        }
+        public class ReverseIterator : Iterator<G>
+        {
+            private Node<G> currentNode;
+
+            public bool hasNext()
+            {
+                return currentNode != null;
+            }
+
+            public G next()
+            {
+                G data = currentNode.data;
+                currentNode = currentNode.previous;
+                return data;
+            }
+
+            public void setCurrentNode(Node<G> currentNode)
+            {
+                this.currentNode = currentNode;
+            }
+
+            Node<G> getCurrentNode()
+            {
+                return currentNode;
+            }
         }
 
-        private Node head;
-        private Node tail;
+        private Node<G> head;
+        private Node<G> tail;
         private int size;
+        private static int listsCount = 0;
+
+        public LinkedList()
+        {
+            listsCount++;
+        }
+
+        public static int getListsCount()
+        {
+            return listsCount;
+        }
 
         /***
          * Inserts data at the end of the list
          * @param data Data to be inserted
         */
-        public void add(int data)
+        public void add(G data)
         {
-            Node node = new Node(data);
-            node.setPrevious(tail);
+            Node<G> node = new Node<G>(data);
+            node.previous = tail;
 
             if (tail != null)
             {
-                tail.setNext(node);
+                tail.next = node;
             }
 
             if (head == null)
@@ -42,17 +115,17 @@ namespace Reto
          * @param index 0-index
          * @return data in index
         */
-        public int get(int index)
+        public G get(int index)
         {
-            Node currentNode = head;
+            Node<G> currentNode = head;
             int currentIndex = 0;
             while (currentIndex < index)
             {
-                currentNode = currentNode.getNext();
+                currentNode = currentNode.next;
                 currentIndex++;
             }
 
-            return currentNode.getData();
+            return currentNode.data;
         }
 
         /***
@@ -60,86 +133,49 @@ namespace Reto
         */
         public void delete(int index)
         {
-            Node currentNode = head;
+            Node<G> currentNode = head;
             int currentIndex = 0;
 
             if (index < 0 || index >= size)
             {
                 return;
             }
-            size--;
-
-            if (size == 0)
-            {
-                head = head.getNext();
-                head.setPrevious(null);
-            }
-
-            if (index == size)
-            {
-                tail = tail.getPrevious();
-                tail.setNext(null);
-            }
-
-            if (index > 0 && index < size)
-            {
-                while (currentIndex < index)
-                {
-                    currentNode = currentNode.getNext();
-                    currentIndex++;
-                }
-                currentNode.getPrevious().setNext(currentNode.getNext());
-                currentNode.getNext().setPrevious(currentNode.getPrevious());
-            }
-        }
-
-        /***
-         * 
-         */
-        public void insert(int data, Position pos, Iterator it)
-        {
-            Node newNode = new Node(data);
-            Node currentNode = it.getCurrentNode();
-
-            if(pos == Position.AFTER)
-            {
-                newNode.setNext(currentNode.getNext());
-                newNode.setPrevious(currentNode);
-                currentNode.setNext(newNode);
-                if(newNode.getNext() != null)
-                {
-                    newNode.getNext().setPrevious(newNode);
-                }
-                else
-                {
-                    tail = newNode;
-                }
-            }
             else
             {
-                newNode.setPrevious(currentNode.getPrevious());
-                newNode.setNext(currentNode);
-                currentNode.setPrevious(newNode);
-                if (newNode.getPrevious() != null)
+                size--;
+                if (size == 0)
                 {
-                    newNode.getPrevious().setNext(newNode);
-                }
-                else
+                    head = null;
+                    tail = null;
+                }else if(index == size)
                 {
-                    head = newNode;
+                    tail = tail.previous;
+                    tail.next = null;
+                }else if(index > 0 && index < size)
+                {
+                    while(currentIndex < index)
+                    {
+                        currentNode = currentNode.next;
+                        currentIndex++;
+                    }
+                    currentNode.previous.next = currentNode.next;
+                    currentNode.next.previous = currentNode.previous;
                 }
             }
-            size++;
         }
 
-        public Iterator getIterator()
+        public Iterator<G> getForwardIterator()
         {
-            return new Iterator(head);
+            ForwardIterator it = new ForwardIterator();
+            it.setCurrentNode(head);
+            return it;
         }
 
-        public ReverseIterator getReverseIterator()
+        public Iterator<G> getReverseIterator()
         {
-            return new ReverseIterator(tail);
+            ReverseIterator it = new ReverseIterator();
+            it.setCurrentNode(tail);
+            return it;
         }
 
         public int getSize()

@@ -6,51 +6,118 @@ namespace Reto
     {
         public static void Main(string[] args)
         {
-            LinkedList lista1 = new LinkedList();
+            List<int> list1 = new LinkedList<int>();
+            List<string> list2 = new LinkedList<string>();
 
-            lista1.add(1);
-            lista1.add(4);
-            lista1.add(3);
-            lista1.add(7);
+            list1.add(1);
+            list1.add(4);
+            list1.add(3);
+            list1.add(10);
+            list1.add(7);
 
-            Iterator it = lista1.getIterator();
+            list2.add("hola");
+            list2.add(" Object ");
+            list2.add(" Oriented ");
+            list2.add(" Programming ");
 
-            while (it.hasNext())
-            {
-                Iterator backupIt = new Iterator(it);
-                int element = it.next();
+            list1.delete(3);
 
-                if (element == 3)
-                {
-                    lista1.insert(10, LinkedList.Position.BEFORE, backupIt);
-                }
+            Iterator<int> itInt = list1.getForwardIterator();
 
-                if(element == 7)
-                {
-                    lista1.insert(15, LinkedList.Position.AFTER, backupIt);
-                }
-            }
-
-            lista1.delete(3);
-
-            Console.WriteLine("El tamaño es: {0}", lista1.getSize());
             Console.WriteLine("------------------------------------");
+            Console.WriteLine("LinkedList:\n");
+            Console.WriteLine("El tamaño es: {0}", list1.getSize());
 
-            it = lista1.getIterator();
-
-            while (it.hasNext())
+            while (itInt.hasNext())
             {
-                int element = it.next();
+                int element = itInt.next();
+                Console.WriteLine("Dato: {0}", element);
+            }
+            Console.WriteLine();
+
+            itInt = list1.getReverseIterator();
+
+            while (itInt.hasNext())
+            {
+                int element = itInt.next();
                 Console.WriteLine("Dato: {0}", element);
             }
 
+            Iterator<string> itString = list2.getForwardIterator();
+
+            Console.WriteLine("------------------------------------");
+            Console.WriteLine("El tamaño es: {0}", list1.getSize());
+
+            while (itString.hasNext())
+            {
+                string element = itString.next();
+                Console.WriteLine("Dato: {0}", element);
+            }
+            Console.WriteLine();
+
+            itString = list2.getReverseIterator();
+
+            while (itString.hasNext())
+            {
+                string element = itString.next();
+                Console.WriteLine("Dato: {0}", element);
+            }
             Console.WriteLine("------------------------------------");
 
-            ReverseIterator reverseIterator = lista1.getReverseIterator();
+            list1 = new ArrayList<int>();
+            list2 = new ArrayList<string>();
 
-            while (reverseIterator.hasNext())
+            list1.add(2);
+            list1.add(6);
+            list1.add(9);
+            list1.add(17);
+            list1.add(7);
+
+            list2.add("hola");
+            list2.add(" Object ");
+            list2.add(" Oriented ");
+            list2.add(" Programming ");
+
+            list1.delete(2);
+
+            itInt = list1.getForwardIterator();
+
+            Console.WriteLine("------------------------------------");
+            Console.WriteLine("ArrayList:\n");
+            Console.WriteLine("El tamaño es: {0}", list1.getSize());
+
+            while (itInt.hasNext())
             {
-                int element = reverseIterator.next();
+                int element = itInt.next();
+                Console.WriteLine("Dato: {0}", element);
+            }
+            Console.WriteLine();
+
+            itInt = list1.getReverseIterator();
+
+            while (itInt.hasNext())
+            {
+                int element = itInt.next();
+                Console.WriteLine("Dato: {0}", element);
+            }
+
+            itString = list2.getForwardIterator();
+
+            Console.WriteLine("------------------------------------");
+            Console.WriteLine("El tamaño es: {0}", list1.getSize());
+
+            while (itString.hasNext())
+            {
+                string element = itString.next();
+                Console.WriteLine("Dato: {0}", element);
+            }
+            Console.WriteLine();
+
+            itString = list2.getReverseIterator();
+
+            while (itString.hasNext())
+            {
+                string element = itString.next();
                 Console.WriteLine("Dato: {0}", element);
             }
             Console.WriteLine("------------------------------------");

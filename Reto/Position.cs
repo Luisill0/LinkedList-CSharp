@@ -4,9 +4,8 @@ using System.Text;
 
 namespace Reto
 {
-    public interface Iterator<G>
+    public enum Position
     {
-        bool hasNext();
-        G next();
+        BEFORE,AFTER
     }
 }
